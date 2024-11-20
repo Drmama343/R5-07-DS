@@ -1,0 +1,40 @@
+name: Create Q2_archive_README.md
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  create-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Étape 1 : Vérifier le dépôt
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Étape 2 : Créer le fichier Q2_archive_README.md
+    - name: Create Q2_archive_README.md
+      run: |
+        echo "Nom : PORET" > Q2_archive_README.md
+        echo "Prénom : Mathys" >> Q2_archive_README.md
+        echo "Date et heure d'exécution : $(date '+%Y-%m-%d %H:%M:%S')" >> Q2_archive_README.md
+        echo "" >> Q2_archive_README.md
+        echo "Contenu de README.md :" >> Q2_archive_README.md
+        echo "-----------------------" >> Q2_archive_README.md
+        cat README.md >> Q2_archive_README.md
+
+    # Étape 3 : Configurer Git
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    # Étape 4 : Commit et push
+    - name: Commit and push changes
+      run: |
+        git add Q2_archive_README.md
+        git commit -m "Add Q2_archive_README.md with README.md content"
+        git push
