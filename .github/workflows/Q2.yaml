@@ -11,30 +11,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Étape 1 : Vérifier le dépôt
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Étape 2 : Créer le fichier Q2_archive_README.md
-    - name: Create Q2_archive_README.md
+    - name: Create Q2_archive_README.md in Archive folder
       run: |
-        echo "Nom : PORET" > Q2_archive_README.md
-        echo "Prénom : Mathys" >> Q2_archive_README.md
-        echo "Date et heure d'exécution : $(date '+%Y-%m-%d %H:%M:%S')" >> Q2_archive_README.md
-        echo "" >> Q2_archive_README.md
-        echo "Contenu de README.md :" >> Q2_archive_README.md
-        echo "-----------------------" >> Q2_archive_README.md
-        cat README.md >> Q2_archive_README.md
+        mkdir -p Archive  # Créer le dossier Archive si ce n'est pas déjà fait
+        echo "Nom : PORET" > Archive/Q2_archive_README.md
+        echo "Prénom : Mathys" >> Archive/Q2_archive_README.md
+        echo "Date et heure d'exécution : $(date '+%Y-%m-%d %H:%M:%S')" >> Archive/Q2_archive_README.md
+        echo "" >> Archive/Q2_archive_README.md
+        echo "Contenu de README.md :" >> Archive/Q2_archive_README.md
+        echo "-----------------------" >> Archive/Q2_archive_README.md
+        cat README.md >> Archive/Q2_archive_README.md
 
-    # Étape 3 : Configurer Git
     - name: Configure Git
       run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "Drmama343"
+        git config --global user.email "poretmathys2004@gmail.com"
 
-    # Étape 4 : Commit et push
     - name: Commit and push changes
       run: |
-        git add Q2_archive_README.md
+        git add Archive/Q2_archive_README.md
         git commit -m "Add Q2_archive_README.md with README.md content"
         git push

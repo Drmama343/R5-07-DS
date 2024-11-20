@@ -7,29 +7,34 @@ on:
   workflow_dispatch:
 
 jobs:
-  generate-and-push:
+  create-and-push:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Create Q3_archive_java.txt
+    # Étape 2 : Créer le fichier Q3_archive_java.txt dans Archive
+    - name: Create Q3_archive_java.txt in Archive folder
       run: |
-        echo "Nom : PORET" > Q3_archive_java.txt
-        echo "Prénom : Mathys" >> Q3_archive_java.txt
-        echo "" >> Q3_archive_java.txt
-        echo "Contenu de Q3.java :" >> Q3_archive_java.txt
-        echo "---------------------" >> Q3_archive_java.txt
-        cat Q3.java >> Q3_archive_java.txt
+        mkdir -p Archive  # Créer le dossier Archive si ce n'est pas déjà fait
+        echo "Nom : PORET" > Archive/Q3_archive_java.txt
+        echo "Prénom : Mathys" >> Archive/Q3_archive_java.txt
+        echo "Date et heure d'exécution : $(date '+%Y-%m-%d %H:%M:%S')" >> Archive/Q3_archive_java.txt
+        echo "" >> Archive/Q3_archive_java.txt
+        echo "Contenu du fichier Q3.java :" >> Archive/Q3_archive_java.txt
+        echo "------------------------" >> Archive/Q3_archive_java.txt
+        cat Java/Q3.java >> Archive/Q3_archive_java.txt
 
+    # Étape 3 : Configurer Git
     - name: Configure Git
       run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "Drmama343"
+        git config --global user.email "poretmathys2004@gmail.com"
 
+    # Étape 4 : Commit et push
     - name: Commit and push changes
       run: |
-        git add Q3_archive_java.txt
+        git add Archive/Q3_archive_java.txt
         git commit -m "Add Q3_archive_java.txt with Q3.java content"
         git push
