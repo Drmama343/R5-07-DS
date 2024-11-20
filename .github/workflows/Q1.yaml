@@ -1,0 +1,30 @@
+name: Create Q1_archive_README.md
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  copy-and-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Copy README.md
+      run: |
+        cp README.md Q1_archive_README.md
+
+    - name: Configure Git
+      run: |
+        git config --global user.name "Drmama343"
+        git config --global user.email "poretmathys2004@gmail.com"
+
+    - name: Commit and push changes
+      run: |
+        git add Q1_archive_README.md
+        git commit -m "Add Q1_archive_README.md with README.md content"
+        git push
