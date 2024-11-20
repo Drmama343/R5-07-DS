@@ -1,0 +1,55 @@
+name: Create Q6 Archive and Differences
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  generate-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Get current date and time
+      id: datetime
+      run: echo "::set-output name=datetime::$(date '+%d-%m-%Y-%H%M%S')"
+      
+    - name: Create Q6_archive_date.txt
+      run: |
+        FILENAME="Q6_archive_$(date '+%d-%m-%Y-%H%M%S').txt"
+        echo "Nom : PORET" > $FILENAME
+        echo "Prénom : Mathys" >> $FILENAME
+        echo "" >> $FILENAME
+        echo "Contenu de Q6.java :" >> $FILENAME
+        echo "---------------------" >> $FILENAME
+        cat Q6.java >> $FILENAME
+        echo "" >> $FILENAME
+        echo "Taille du fichier Q6.java :" >> $FILENAME
+        echo "---------------------------" >> $FILENAME
+        wc -c Q6.java | awk '{print "Nombre de caractères : " $1}' >> $FILENAME
+        wc -l Q6.java | awk '{print "Nombre de lignes : " $1}' >> $FILENAME
+
+    - name: Compare with previous file
+      run: |
+        LAST_FILE=$(ls Q6_archive_*.txt | sort | tail -n 2 | head -n 1 || echo "")
+        NEW_FILE=$(ls Q6_archive_*.txt | sort | tail -n 1)
+        if [ -n "$LAST_FILE" ]; then
+          diff $LAST_FILE $NEW_FILE > Q6_différences.txt || true
+        else
+          echo "Pas de fichier précédent pour comparer." > Q6_différences.txt
+        fi
+
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Commit and push changes
+      run: |
+        git add Q6_archive_*.txt Q6_différences.txt
+        git commit -m "Add Q6 archive and differences"
+        git push
