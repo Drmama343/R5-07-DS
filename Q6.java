@@ -11,7 +11,7 @@ public class Q6 {
                     System.out.print(" ");
                 }
                 for (int k = 1; k <= i; k++) {
-                    System.out.print("x");
+                    System.out.print("X");
                 }
                 System.out.println();
             }
