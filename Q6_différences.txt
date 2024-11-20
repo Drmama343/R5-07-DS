@@ -1,4 +1,0 @@
-19c19
-<                     System.out.print("x");
----
->                     System.out.print("Y");
