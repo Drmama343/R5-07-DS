@@ -1,0 +1,41 @@
+name: Create Q5_archive_date.txt
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  generate-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date '+%d-%m-%Y')"
+
+    - name: Create Q5_archive_date.txt
+      run: |
+        FILENAME="Q5_archive_$(date '+%d-%m-%Y').txt"
+        echo "Nom : PORET" > $FILENAME
+        echo "Prénom : Mathys" >> $FILENAME
+        echo "" >> $FILENAME
+        echo "Contenu de Q5.java :" >> $FILENAME
+        echo "---------------------" >> $FILENAME
+        cat Q5.java >> $FILENAME
+
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Commit and push changes
+      run: |
+        FILENAME="Q5_archive_$(date '+%d-%m-%Y').txt"
+        git add $FILENAME
+        git commit -m "Add $FILENAME with Q5.java content"
+        git push
